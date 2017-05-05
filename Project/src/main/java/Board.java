@@ -1,7 +1,4 @@
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Jack on 3/5/2017.
@@ -40,6 +37,30 @@ public class Board {
                 patches[i][j] = new Patch();
             }
         }
+
+    }
+
+    /**
+     * Get all people on the board (people alive)
+     * @return set of people on the board
+     */
+    public Set<Person> getPeople() {
+        return positions.keySet();
+    }
+
+    /**
+     * Get all patches on the board
+     * @return set of patches on the board
+     */
+    public Set<Patch> getPatches() {
+        // TODO more efficient implementation
+        Set<Patch> s = new HashSet<Patch>();
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                s.add(patches[i][j]);
+            }
+        }
+        return s;
     }
 
     /**
@@ -54,12 +75,33 @@ public class Board {
     }
 
     /**
+     * Move a person on board to a new position
+     * @param p person to be moved
+     * @param x x coordinate on board
+     * @param y y coordinate on board
+     */
+    public void move(Person p, int x, int y) {
+        // TODO
+    }
+
+    /**
      * Remove a person from board
      *
      * @param p person to be removed
      */
     public void remove(Person p) {
         positions.remove(p);
+    }
+
+    /**
+     * Get people at a position
+     *
+     * @param x x coordinate of board
+     * @param y y coordinate of baord
+     * @return all people at the position
+     */
+    public List<Person> getPeopleAt(int x, int y) {
+
     }
 
     /**

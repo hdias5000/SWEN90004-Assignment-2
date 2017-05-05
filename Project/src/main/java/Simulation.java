@@ -6,8 +6,7 @@ import java.util.List;
 public class Simulation {
 
     boolean running;
-    List<Patch> patches;
-    List<Person> people;
+    Board board;
 
     /**
      * Run the simulation
@@ -17,15 +16,14 @@ public class Simulation {
         for (int i = 0; i < length; i++) {
             // TODO record data at this tick
 
-            for (Person person : people) {
+            for (Person person : board.getPeople()) {
                 person.tick();
             }
 
-            for (Patch patch : patches) {
+            for (Patch patch : board.getPatches()) {
                 patch.tick();
             }
         }
-
     }
 
     // TODO have a function to export data to CSV

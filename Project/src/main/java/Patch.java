@@ -3,6 +3,13 @@
  */
 public class Patch {
 
+    float grain;
+    float maxGrain;
+
+    public float getGrain() {
+        return grain;
+    }
+
     public void tick() {
         // TODO
     }
