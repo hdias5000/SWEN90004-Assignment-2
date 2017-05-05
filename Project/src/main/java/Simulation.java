@@ -9,8 +9,14 @@ public class Simulation {
     List<Patch> patches;
     List<Person> people;
 
-    void run() {
-        while (running) {
+    /**
+     * Run the simulation
+     * @param length time length of simulation
+     */
+    void run(int length) {
+        for (int i = 0; i < length; i++) {
+            // TODO record data at this tick
+
             for (Person person : people) {
                 person.tick();
             }
@@ -19,9 +25,23 @@ public class Simulation {
                 patch.tick();
             }
         }
+
     }
 
+    // TODO have a function to export data to CSV
+
+    /**
+     * Set up the simulation
+     */
     void setup() {
         // TODO
+    }
+
+    /**
+     * The main function
+     * @param args command line arguments
+     */
+    public static void main(String[] args) {
+
     }
 }
