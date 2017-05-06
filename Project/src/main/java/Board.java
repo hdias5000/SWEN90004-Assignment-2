@@ -81,7 +81,8 @@ public class Board {
      * @param y y coordinate on board
      */
     public void move(Person p, int x, int y) {
-        // TODO
+        positions.remove(p);
+        positions.put(p, new Point(x, y));
     }
 
     /**
@@ -100,8 +101,14 @@ public class Board {
      * @param y y coordinate of baord
      * @return all people at the position
      */
-    public List<Person> getPeopleAt(int x, int y) {
-
+    public Set<Person> getPeopleAt(int x, int y) {
+        Set<Person> people = new HashSet<Person>();
+        for (Map.Entry<Person, Point> entry: positions.entrySet()) {
+            if (entry.getValue().getX() == x && entry.getValue().getY() == y) {
+                people.add(entry.getKey());
+            }
+        }
+        return people;
     }
 
     /**

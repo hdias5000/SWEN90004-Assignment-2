@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /**
  * Created by Jack on 3/5/2017.
  */
@@ -8,6 +10,14 @@ public class Person {
     float metabolism;
     int age;
     int maxAge;
+
+    public Person(Board board, float grain, float metabolism, int maxAge) {
+        this.board = board;
+        this.grain = grain;
+        this.metabolism = metabolism;
+        // random age between 0 and max age
+        this.age = new Random().nextInt(maxAge);
+    }
 
     /**
      * Get the amount of grain the person currently holds

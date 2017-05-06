@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Jack on 3/5/2017.
@@ -33,6 +34,9 @@ public class Simulation {
      */
     void setup() {
         // TODO
+        // random life expectancy between min and max
+        // int lifeExpectancy = lifeExpMin + new Random().nextInt(lifeExpMax + 1);
+
     }
 
     /**

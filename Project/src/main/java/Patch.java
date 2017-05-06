@@ -6,6 +6,10 @@ public class Patch {
     float grain;
     float maxGrain;
 
+    public Patch(float grain) {
+        this.grain = grain;
+    }
+
     public float getGrain() {
         return grain;
     }
