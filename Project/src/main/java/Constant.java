@@ -24,4 +24,10 @@ public class Constant {
 	//the total population on the board
 	public final static int NUM_PEOPLE = 250;
 
+	public final static double PERCENT_BEST_LAND = 0.1;
+
+	public static final int METABOLISM_MAX = 15;
+
+	public static final int BOARD_WIDTH = 50;
+	public static final int BOARD_HEIGHT = 50;
 }

@@ -8,6 +8,7 @@ public class Simulation {
 
     boolean running;
     Board board;
+    int time = 0;
 
     /**
      * Run the simulation
@@ -21,9 +22,13 @@ public class Simulation {
                 person.tick();
             }
 
-            for (Patch patch : board.getPatches()) {
-                patch.tick();
+            if (time % Constant.GRAIN_GROWTH_INTERVAL == 0) {
+                for (Patch patch : board.getPatches()) {
+                    patch.addGrain(Constant.GRAIN_GROWTH_AMOUNT);
+                }
             }
+
+            time += 1;
         }
     }
 
@@ -33,10 +38,20 @@ public class Simulation {
      * Set up the simulation
      */
     void setup() {
-        // TODO
-        // random life expectancy between min and max
-        // int lifeExpectancy = lifeExpMin + new Random().nextInt(lifeExpMax + 1);
+        board = new Board(Constant.BOARD_WIDTH, Constant.BOARD_HEIGHT);
 
+        // put people to random positions
+        Random random = new Random();
+        for (int i = 0; i < Constant.NUM_PEOPLE; i++) {
+            int metabolism = 1 + random.nextInt(Constant.METABOLISM_MAX);
+            int wealth = metabolism + random.nextInt(50);
+            int lifeExpectancy = Constant.LIFE_EXPECTANCY_MIN
+                    + random.nextInt(Constant.LIFE_EXPECTANCY_MAX + 1);
+            Person person = new Person(board, wealth, metabolism, lifeExpectancy);
+            int x = random.nextInt(Constant.BOARD_WIDTH);
+            int y = random.nextInt(Constant.BOARD_HEIGHT);
+            board.put(person, x, y);
+        }
     }
 
     /**
@@ -44,6 +59,8 @@ public class Simulation {
      * @param args command line arguments
      */
     public static void main(String[] args) {
-
+        Simulation simulation = new Simulation();
+        simulation.setup();
+        // ...
     }
 }

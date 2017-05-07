@@ -11,30 +11,96 @@ public class Board {
     Patch[][] patches;
 
     /**
+     * Perform diffuse operation in Netlogo
+     *
+     * @param values     matrix of values to apply diffuse
+     * @param height     height of matrix
+     * @param width      width of matrix
+     * @param x          x coordinate of point of diffuse
+     * @param y          y coordinate of point of diffuse
+     * @param percentage percentage of point to be removed and shared for diffuse
+     */
+    private static void diffuse(double[][] values, int height, int width, int x, int y, double percentage) {
+        double divided = values[x][y] * percentage / 8;
+        values[x][y] -= values[x][y] * percentage;
+
+        // wraps around values out of range
+        int x_prev = x - 1 < 0 ? width - 1 : x - 1;
+        int x_next = x + 1 >= width ? 0 : x + 1;
+        int y_prev = y - 1 < 0 ? height - 1 : y - 1;
+        int y_next = y + 1 >= height ? 0 : y + 1;
+
+        // added divided shared values to nearby cells
+        values[x_prev][y_prev] += divided;
+        values[x][y_prev] += divided;
+        values[x_next][y_prev] += divided;
+        values[x_prev][y] += divided;
+        values[x_next][y] += divided;
+        values[x_prev][y_next] += divided;
+        values[x][y_next] += divided;
+        values[x_next][y_next] += divided;
+    }
+
+    /**
      * Initialise a new board with people with random grain of patches
      * and random position of people
      *
      * @param width  width of board
      * @param height height of board
-     * @param people people to be put on board
      */
-    public Board(int width, int height, List<Person> people) {
+    public Board(int width, int height) {
         this.width = width;
         this.height = height;
         this.positions = new HashMap<Person, Point>();
         patches = new Patch[height][width];
 
-        // put people to random positions
         Random random = new Random();
-        for (Person person : people) {
-            put(person, random.nextInt(height), random.nextInt(width));
+        // determine patch initial values
+        double[][] maxGrainVals = new double[height][width];
+        double[][] initialGrainVals = new double[height][width];
+
+        //  ;; give some patches the highest amount of grain possible --
+        // ;; these patches are the "best land"
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (random.nextFloat() < Constant.PERCENT_BEST_LAND) {
+                    maxGrainVals[i][j] = Constant.MAX_GRAIN;
+                    initialGrainVals[i][j] = maxGrainVals[i][j];
+                }
+                maxGrainVals[i][j] = 0;
+                initialGrainVals[i][j] = 0;
+            }
+        }
+
+        //   ;; spread that grain around the window a little and put a little back
+        // ;; into the patches that are the "best land" found above
+        for (int n = 0; n < 5; n++) {
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    if (maxGrainVals[i][j] != 0) {
+                        initialGrainVals[i][j] = maxGrainVals[i][j];
+                        diffuse(initialGrainVals, height, width, i, j, 0.25);
+                    }
+                }
+            }
+        }
+
+        // ;; spread the grain around some more
+        for (int n = 0; n < 10; n++) {
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    diffuse(initialGrainVals, height, width, i, j, 0.25);
+                }
+            }
         }
 
         // initialise patches
         // TODO set random grain
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                patches[i][j] = new Patch();
+                int grainHere = (int) initialGrainVals[i][j];
+                // initial grain level is also maximum
+                patches[i][j] = new Patch(grainHere, grainHere);
             }
         }
 
@@ -42,6 +108,7 @@ public class Board {
 
     /**
      * Get all people on the board (people alive)
+     *
      * @return set of people on the board
      */
     public Set<Person> getPeople() {
@@ -50,6 +117,7 @@ public class Board {
 
     /**
      * Get all patches on the board
+     *
      * @return set of patches on the board
      */
     public Set<Patch> getPatches() {
@@ -76,6 +144,7 @@ public class Board {
 
     /**
      * Move a person on board to a new position
+     *
      * @param p person to be moved
      * @param x x coordinate on board
      * @param y y coordinate on board
@@ -103,7 +172,7 @@ public class Board {
      */
     public Set<Person> getPeopleAt(int x, int y) {
         Set<Person> people = new HashSet<Person>();
-        for (Map.Entry<Person, Point> entry: positions.entrySet()) {
+        for (Map.Entry<Person, Point> entry : positions.entrySet()) {
             if (entry.getValue().getX() == x && entry.getValue().getY() == y) {
                 people.add(entry.getKey());
             }

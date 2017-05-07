@@ -4,14 +4,13 @@ import java.util.Random;
  * Created by Jack on 3/5/2017.
  */
 public class Person {
-
     Board board;
-    float grain;
-    float metabolism;
+    int grain;
+    int metabolism;
     int age;
     int maxAge;
 
-    public Person(Board board, float grain, float metabolism, int maxAge) {
+    public Person(Board board, int grain, int metabolism, int maxAge) {
         this.board = board;
         this.grain = grain;
         this.metabolism = metabolism;
@@ -23,7 +22,7 @@ public class Person {
      * Get the amount of grain the person currently holds
      * @return amount of grain
      */
-    public float getGrain() {
+    public int getGrain() {
         return grain;
     }
 

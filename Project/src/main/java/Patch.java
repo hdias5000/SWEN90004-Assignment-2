@@ -2,25 +2,21 @@
  * Created by Jack on 3/5/2017.
  */
 public class Patch {
+    int grain;
+    int maxGrain;
 
-    float grain;
-    float maxGrain;
-
-    public Patch(float grain) {
+    public Patch(int grain, int maxGrain) {
         this.grain = grain;
+        this.maxGrain = maxGrain;
     }
 
-    public float getGrain() {
+    public int getGrain() {
         return grain;
     }
 
-    public void addGrain(){
-    	if(Constant.MAX_GRAIN > maxGrain)
-    		grain++;
-    }
-    
-    
-    public void tick() {
-        // TODO
+    public void addGrain(int amount) {
+        if (Constant.MAX_GRAIN > maxGrain) {
+            grain += amount;
+        }
     }
 }
