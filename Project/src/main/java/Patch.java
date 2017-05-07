@@ -14,6 +14,12 @@ public class Patch {
         return grain;
     }
 
+    public void addGrain(){
+    	if(Constant.MAX_GRAIN > maxGrain)
+    		grain++;
+    }
+    
+    
     public void tick() {
         // TODO
     }
