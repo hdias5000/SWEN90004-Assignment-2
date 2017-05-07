@@ -1,12 +1,11 @@
-import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Created by Jack on 3/5/2017.
  */
 public class Simulation {
-
-    boolean running;
     Board board;
     int time = 0;
 
@@ -19,7 +18,9 @@ public class Simulation {
             // TODO record data at this tick
 
             for (Person person : board.getPeople()) {
-                person.tick();
+                Point p = person.getNextPos();
+                harvest();
+                person.moveEatAgeDie(p);
             }
 
             if (time % Constant.GRAIN_GROWTH_INTERVAL == 0) {
@@ -29,6 +30,22 @@ public class Simulation {
             }
 
             time += 1;
+        }
+    }
+
+    /**
+     * Perform harvest activity, take grain from patches equally distribute to people at the patch
+     */
+    void harvest() {
+        for (Map.Entry<Point, Set<Person>> entry: board.getAllPositions().entrySet()) {
+            Point p = entry.getKey();
+            Set<Person> people = entry.getValue();
+            Patch patch = board.getPatchAt(p.getX(), p.getY());
+            // NOTE integer division below
+            int divided = patch.removeGrain() / people.size();
+            for (Person person : people) {
+                person.addGrain(divided);
+            }
         }
     }
 

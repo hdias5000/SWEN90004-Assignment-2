@@ -7,8 +7,8 @@ public class Board {
     int width;
     int height;
 
-    Map<Person, Point> positions;
-    Patch[][] patches;
+    private Map<Person, Point> positions;
+    private Patch[][] patches;
 
     /**
      * Perform diffuse operation in Netlogo
@@ -103,7 +103,6 @@ public class Board {
                 patches[i][j] = new Patch(grainHere, grainHere);
             }
         }
-
     }
 
     /**
@@ -154,6 +153,25 @@ public class Board {
         positions.put(p, new Point(x, y));
     }
 
+    public Point getPosition(Person p) {
+        return positions.get(p);
+    }
+
+    /**
+     * Get positions for all people on board
+     * @return
+     */
+    public Map<Point, Set<Person>> getAllPositions() {
+        Map<Point, Set<Person>> posMap = new HashMap<Point, Set<Person>>();
+        for (Map.Entry<Person, Point> entry : positions.entrySet()) {
+            if (!posMap.containsKey(entry.getValue())) {
+                posMap.put(entry.getValue(), new HashSet<Person>());
+            }
+            posMap.get(entry.getValue()).add(entry.getKey());
+        }
+        return posMap;
+    }
+
     /**
      * Remove a person from board
      *
@@ -163,22 +181,22 @@ public class Board {
         positions.remove(p);
     }
 
-    /**
-     * Get people at a position
-     *
-     * @param x x coordinate of board
-     * @param y y coordinate of baord
-     * @return all people at the position
-     */
-    public Set<Person> getPeopleAt(int x, int y) {
-        Set<Person> people = new HashSet<Person>();
-        for (Map.Entry<Person, Point> entry : positions.entrySet()) {
-            if (entry.getValue().getX() == x && entry.getValue().getY() == y) {
-                people.add(entry.getKey());
-            }
-        }
-        return people;
-    }
+//    /**
+//     * Get people at a position
+//     *
+//     * @param x x coordinate of board
+//     * @param y y coordinate of board
+//     * @return all people at the position
+//     */
+//    public Set<Person> getPeopleAt(int x, int y) {
+//        Set<Person> people = new HashSet<Person>();
+//        for (Map.Entry<Person, Point> entry : positions.entrySet()) {
+//            if (entry.getValue().getX() == x && entry.getValue().getY() == y) {
+//                people.add(entry.getKey());
+//            }
+//        }
+//        return people;
+//    }
 
     /**
      * Peek a patch on board
@@ -187,7 +205,7 @@ public class Board {
      * @param y y coordinate on board
      * @return the patch at position (x, y)
      */
-    public Patch peek(int x, int y) {
+    public Patch getPatchAt(int x, int y) {
         return patches[x][y];
     }
 }

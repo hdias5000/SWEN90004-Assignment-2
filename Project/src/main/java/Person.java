@@ -27,20 +27,19 @@ public class Person {
     }
 
     /**
+     *
+     * @param amount
+     */
+    public void addGrain(int amount) {
+        grain += amount;
+    }
+
+    /**
      * Get the age of the person
      * @return age of the person
      */
     public int getAge() {
         return age;
-    }
-
-    /**
-     * Take grain from patch the person is currently at
-     */
-    void harvest() {
-        // TODO
-        // NOTE some job may need to be performed by board or simulation,
-        // since multiple people at the same position share grain
     }
 
     /**
@@ -71,12 +70,12 @@ public class Person {
         }
     }
 
-    /**
-     * Perform action for one tick
-     */
-    public void tick() {
-        Point p = getNextPos();
-        harvest();
-        moveEatAgeDie(p);
-    }
+//    /**
+//     * Perform action for one tick
+//     */
+//    public void tick() {
+//        Point p = getNextPos();
+//        harvest();
+//        moveEatAgeDie(p);
+//    }
 }
