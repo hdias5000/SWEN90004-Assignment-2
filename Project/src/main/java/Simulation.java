@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -7,6 +8,7 @@ import java.util.Set;
  */
 public class Simulation {
     Board board;
+    Csv csv;
     int time = 0;
 
     /**
@@ -53,9 +55,11 @@ public class Simulation {
 
     /**
      * Set up the simulation
+     * @throws FileNotFoundException 
      */
-    void setup() {
+    void setup() throws FileNotFoundException {
         board = new Board(Constant.BOARD_WIDTH, Constant.BOARD_HEIGHT);
+        csv = new Csv();
 
         // put people to random positions
         Random random = new Random();
@@ -74,8 +78,9 @@ public class Simulation {
     /**
      * The main function
      * @param args command line arguments
+     * @throws FileNotFoundException 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         Simulation simulation = new Simulation();
         simulation.setup();
         // ...
