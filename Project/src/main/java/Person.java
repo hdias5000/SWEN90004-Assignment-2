@@ -46,9 +46,44 @@ public class Person {
      * Find the next point to move to
      * @return next point to move to
      */
-    Point getNextPos() {
+    Point getNextPos(Point at) {
         // TODO ask Board about patches and decide where to go
-        return null;
+    	Patch patch;
+    	int compareGrain;	
+    	int xMove, yMove;
+    	int x, y;
+    	
+    	xMove = new Random().nextInt(Constant.MAX_VISION);
+    	yMove = new Random().nextInt(Constant.MAX_VISION);
+    	
+    	patch = board.getPatchAt(at.getX(), at.getY());
+    	compareGrain = patch.grain;	
+    	
+    	x = at.getX() - xMove;
+    	y = at.getY() - yMove;
+    	
+    	// TODO Fix the loop
+    	for (int i = 0; i < xMove*2; i++) {
+            for (int j = 0; j < yMove*2; j++) {
+                	if(y >= Constant.BOARD_HEIGHT) 
+                		y = 0;
+                	
+                	else 
+                		y += 1;
+                	
+                	patch = board.getPatchAt(x, y);
+                	
+                	if(compareGrain < patch.grain){
+                		compareGrain = patch.grain;
+                		at.x = x;
+                		at.y = y;
+                	}
+            }
+            
+            if(x >= Constant.BOARD_WIDTH) x = 0;
+            else x++;
+    	}
+        return at;
     }
 
     /**
