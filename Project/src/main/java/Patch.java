@@ -38,4 +38,9 @@ public class Patch {
             grain += amount;
         }
     }
+
+    @Override
+    public String toString() {
+        return grain + "/" + maxGrain;
+    }
 }

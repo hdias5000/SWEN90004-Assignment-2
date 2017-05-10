@@ -83,6 +83,7 @@ public class Simulation {
     public static void main(String[] args) throws FileNotFoundException {
         Simulation simulation = new Simulation();
         simulation.setup();
+        System.out.println(simulation.board.patchesToString());
         // ...
     }
 }

@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by Jack on 3/5/2017.
@@ -21,7 +23,7 @@ public class Board {
      * @param percentage percentage of point to be removed and shared for diffuse
      */
     private static void diffuse(double[][] values, int height, int width, int x, int y, double percentage) {
-        double divided = values[x][y] * percentage / 8;
+        double divided = values[x][y] * percentage / 8.0;
         values[x][y] -= values[x][y] * percentage;
 
         // wraps around values out of range
@@ -66,9 +68,10 @@ public class Board {
                 if (random.nextFloat() < Constant.PERCENT_BEST_LAND) {
                     maxGrainVals[i][j] = Constant.MAX_GRAIN;
                     initialGrainVals[i][j] = maxGrainVals[i][j];
+                } else {
+                    maxGrainVals[i][j] = 0;
+                    initialGrainVals[i][j] = 0;
                 }
-                maxGrainVals[i][j] = 0;
-                initialGrainVals[i][j] = 0;
             }
         }
 
@@ -81,6 +84,7 @@ public class Board {
                         initialGrainVals[i][j] = maxGrainVals[i][j];
                         diffuse(initialGrainVals, height, width, i, j, 0.25);
                     }
+//                    System.out.println(i + " " + j + " " + initialGrainVals[i][j]);
                 }
             }
         }
@@ -121,7 +125,7 @@ public class Board {
      */
     public Set<Patch> getPatches() {
         // TODO more efficient implementation
-        Set<Patch> s = new HashSet<Patch>();
+        Set<Patch> s = new HashSet<>();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 s.add(patches[i][j]);
@@ -207,5 +211,22 @@ public class Board {
      */
     public Patch getPatchAt(int x, int y) {
         return patches[x][y];
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String patchesToString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < height; i++) {
+            Patch[] row = patches[i];
+            List<String> strings = Arrays.stream(row).map(
+                    p -> String.format("%6s", p.toString())
+            ).collect(Collectors.toList());
+            sb.append(String.join(" ", strings));
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }
