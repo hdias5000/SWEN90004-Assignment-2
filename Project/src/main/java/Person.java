@@ -53,39 +53,30 @@ public class Person {
         // TODO ask Board about patches and decide where to go
     	Patch patch;
     	int compareGrain;	
-    	int xMove, yMove;
-    	int x, y;
-    	
-    	xMove = new Random().nextInt(Constant.MAX_VISION);
-    	yMove = new Random().nextInt(Constant.MAX_VISION);
     	
     	patch = board.getPatchAt(at.getX(), at.getY());
+    	
+    	int x_prev = at.getX() - vision < 0 ? (at.getX() - vision + 1)+50  : at.getX() - vision;
+        int x_next = at.getX() + vision >= 50 ? (at.getX() + vision)-50 : at.getX() + vision;
+        int y_prev = at.getY() - vision < 0 ? (at.getY() - vision + 1)+50 : at.getY() - vision;
+        int y_next = at.getY() + vision >= 50 ? (at.getY() + vision)-50 : at.getY() + vision;
+
     	compareGrain = patch.grain;	
     	
-    	x = at.getX() - xMove;
-    	y = at.getY() - yMove;
-    	
-    	// TODO Fix the loop
-    	for (int i = 0; i < xMove*2; i++) {
-            for (int j = 0; j < yMove*2; j++) {
-                	if(y >= Constant.BOARD_HEIGHT) 
-                		y = 0;
-                	
-                	else 
-                		y += 1;
-                	
-                	patch = board.getPatchAt(x, y);
+    	for (int i = x_prev; i != x_next+1; i++) {
+            i = i > 50 ? 0 : i;
+            for (int j = y_prev; j != y_next+1; j++) {
+            		j = j > 50 ? 0 : j;
+            				
+                	patch = board.getPatchAt(i, j);
                 	
                 	if(compareGrain < patch.grain){
                 		compareGrain = patch.grain;
-                		at.x = x;
-                		at.y = y;
+                		at.x = i;
+                		at.y = j;
                 	}
             }
-            
-            if(x >= Constant.BOARD_WIDTH) x = 0;
-            else x++;
-    	}
+    	}   	
         return at;
     }
 
