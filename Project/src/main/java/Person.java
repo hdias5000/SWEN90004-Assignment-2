@@ -4,6 +4,7 @@ import java.util.Random;
  * Created by Jack on 3/5/2017.
  */
 public class Person {
+	Arguments args;
     Board board;
     int grain;
     int metabolism;
@@ -11,23 +12,24 @@ public class Person {
     int maxAge;
     int vision;
 
-    public Person(Board board, int grain, int metabolism, int maxAge) {
-        this.board = board;
+    public Person(Arguments args, Board board, int grain, int metabolism, int maxAge) {
+        this.args = args;
+    	this.board = board;
         this.grain = grain;
         this.metabolism = metabolism;
         // random age between 0 and max age
         this.age = new Random().nextInt(maxAge);
         this.maxAge = maxAge;
         // random vision between 0 and max vision
-        this.vision = 1 + new Random().nextInt(Constant.MAX_VISION);
+        this.vision = 1 + new Random().nextInt(args.max_vision);
     }
 
-    static Person makeRandom(Random random, Board board) {
-        int metabolism = 1 + random.nextInt(Constant.METABOLISM_MAX);
+    static Person makeRandom(Arguments args, Random random, Board board) {
+        int metabolism = 1 + random.nextInt(args.metabolism_max);
         int wealth = metabolism + random.nextInt(50);
-        int lifeExpectancy = Constant.LIFE_EXPECTANCY_MIN
-                + random.nextInt(Constant.LIFE_EXPECTANCY_MAX + 1);
-        Person person = new Person(board, wealth, metabolism, lifeExpectancy);
+        int lifeExpectancy = args.life_expentancy_min
+                + random.nextInt(args.life_expentancy_max + 1);
+        Person person = new Person(args, board, wealth, metabolism, lifeExpectancy);
         return person;
     }
 
@@ -107,7 +109,7 @@ public class Person {
         // die (and produce offspring)
         if (age > maxAge || grain <= 0) {
             board.remove(this);
-            board.put(makeRandom(new Random(), board), to.getX(), to.getY());
+            board.put(makeRandom(args, new Random(), board), to.getX(), to.getY());
         }
     }
 

@@ -8,6 +8,7 @@ import java.util.Set;
  * Created by Jack on 3/5/2017.
  */
 public class Simulation {
+	Arguments args;
     Board board;
     Csv csv;
     int time = 0;
@@ -62,14 +63,15 @@ public class Simulation {
      * Set up the simulation
      * @throws FileNotFoundException 
      */
-    void setup() throws FileNotFoundException {
-        board = new Board(Constant.BOARD_WIDTH, Constant.BOARD_HEIGHT);
-        csv = new Csv();
+    void setup(Arguments arguments) throws FileNotFoundException {
+    	args = arguments;
+        board = new Board(args, Constant.BOARD_WIDTH, Constant.BOARD_HEIGHT);
+        csv = new Csv(args);
 
         // put people to random positions
         Random random = new Random();
-        for (int i = 0; i < Constant.NUM_PEOPLE; i++) {
-            Person person = Person.makeRandom(random, board);
+        for (int i = 0; i < args.num_people; i++) {
+            Person person = Person.makeRandom(args, random, board);
             int x = random.nextInt(Constant.BOARD_WIDTH);
             int y = random.nextInt(Constant.BOARD_HEIGHT);
             board.put(person, x, y);
@@ -83,11 +85,12 @@ public class Simulation {
      * @throws FileNotFoundException 
      */
     public static void main(String[] args) throws FileNotFoundException {
-        Simulation simulation = new Simulation();
-        simulation.setup();
+    	Arguments arguments = new Arguments(args);
+        Simulation simulation = new Simulation();       
+        simulation.setup(arguments);
         System.out.println(simulation.board.patchesToString());
 
-        simulation.run(1000);
+        simulation.run(arguments.time_max);
 
         simulation.csv.closeFile();
         // ...

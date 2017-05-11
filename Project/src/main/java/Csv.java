@@ -12,8 +12,8 @@ import java.util.Collections;
  */
 public class Csv {
 	
-	// Name of the output file
-	public static final String FILE_NAME = "output.csv";
+	// All settings
+	public Arguments args;
 	
 	// File writer
 	private PrintWriter pw;
@@ -25,8 +25,11 @@ public class Csv {
 	 *  Open or create a csv file and have titles ready
 	 * @throws FileNotFoundException
 	 */
-	public Csv() throws FileNotFoundException {
-		pw = new PrintWriter(new File(FILE_NAME));
+	public Csv(Arguments args) throws FileNotFoundException {
+		
+		this.args = args;
+		
+		pw = new PrintWriter(new File(args.file_name));
 		StringBuilder sb = new StringBuilder();
 		sb.append("Time tick,");
 		sb.append("Number of people with low wealth,");
@@ -117,13 +120,13 @@ public class Csv {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		for (int u = 0; u < Constant.NUM_PEOPLE; u++) {
+		for (int u = 0; u < args.num_people; u++) {
 			double ud = (double) u;
-			double x = ((ud+1) / Constant.NUM_PEOPLE)*100;
+			double x = ((ud+1) / args.num_people)*100;
 			double y;
-			y = (totalWealth(wealth, u) / totalWealth(wealth, Constant.NUM_PEOPLE-1))*100;
+			y = (totalWealth(wealth, u) / totalWealth(wealth, args.num_people-1))*100;
 			sb.append(df.format(x)+"% ; "+df.format(y)+"%");
-			if (u == Constant.NUM_PEOPLE - 1){
+			if (u == args.num_people - 1){
 				sb.append("\n");
 			}
 			else {
@@ -142,7 +145,7 @@ public class Csv {
 	public int[] generateWealthList(Board board){
 		
 		// initialize the array and get information from the board
-		int[] wealth = new int[Constant.NUM_PEOPLE];
+		int[] wealth = new int[args.num_people];
 		int i = 0;
 		for (Person p : board.getPeople()) {
 			wealth[i] = p.getGrain();
@@ -168,7 +171,7 @@ public class Csv {
 		pw.write(sb.toString());
 		
 		// generate wealth array
-		int[] wealth = new int[Constant.NUM_PEOPLE];
+		int[] wealth = new int[args.num_people];
 		wealth = generateWealthList(board);
 		
 		// count number of people in different level

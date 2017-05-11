@@ -6,6 +6,7 @@ import java.util.stream.Stream;
  * Created by Jack on 3/5/2017.
  */
 public class Board {
+	Arguments args;
     int width;
     int height;
 
@@ -50,7 +51,8 @@ public class Board {
      * @param width  width of board
      * @param height height of board
      */
-    public Board(int width, int height) {
+    public Board(Arguments args, int width, int height) {
+    	this.args = args;
         this.width = width;
         this.height = height;
         this.positions = new HashMap<Person, Point>();
@@ -65,7 +67,7 @@ public class Board {
         // ;; these patches are the "best land"
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                if (random.nextFloat() < Constant.PERCENT_BEST_LAND) {
+                if (random.nextFloat() < args.percent_best_land) {
                     maxGrainVals[i][j] = Constant.MAX_GRAIN;
                     initialGrainVals[i][j] = maxGrainVals[i][j];
                 } else {
