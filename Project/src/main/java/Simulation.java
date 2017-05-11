@@ -73,8 +73,7 @@ public class Simulation {
             int y = random.nextInt(Constant.BOARD_HEIGHT);
             board.put(person, x, y);
         }
-        
-        csv.generateLorenze(board);
+        csv.record(board, time);
         csv.closeFile();
     }
 

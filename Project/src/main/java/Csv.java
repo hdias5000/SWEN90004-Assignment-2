@@ -17,13 +17,6 @@ public class Csv {
 	
 	private PrintWriter pw;
 	
-	private int time;
-	private int num_low;
-	private int num_mid;
-	private int num_high;
-	private int[] wealth;
-	private Point[] lorenz;
-	
 	DecimalFormat df = new DecimalFormat("####0.00");
 	
 	
@@ -34,12 +27,42 @@ public class Csv {
 		sb.append("Number of people with low wealth,");
 		sb.append("Number of people with mid wealth,");
 		sb.append("Number of people with high wealth,");
-		sb.append("Lorenze curve,");
-		sb.append("Gini index,");
+		sb.append("Gini Index,");
+		sb.append("Lorenz Curve,");
 		sb.append("\n");
 		pw.write(sb.toString());
 		// for testing usage
 		//pw.close();
+	}
+	
+	public void countPeople(int[] wealth) {
+		double max_wealth = (double) wealth[wealth.length-1];
+		int num_low = 0;
+		int num_mid = 0;
+		int num_high = 0;
+		for(int i = 0; i < wealth.length; i++) {
+			if (wealth[i] <= max_wealth/3) {
+				num_low += 1;
+			}
+			else if (wealth[i] > max_wealth/3 && wealth[i] <= max_wealth*2/3) {
+				num_mid += 1;
+			}
+			else {
+				num_high += 1;
+			}
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append(num_low+","+num_mid+","+num_high+",");
+		pw.write(sb.toString());
+	}
+	
+	public double totalWealth(int[] wealth, int n){
+
+		double sum = 0.0;
+		for(int i = 0; i <= n; i++){
+			sum += wealth[i];
+		}
+		return sum;
 	}
 	
 	public void calculateGini(){
@@ -52,47 +75,72 @@ public class Csv {
 	 * x = wealth of yth poorest people/ total wealth holding by people poorer than that people
 	 * y = yth poorest people/ total number of people
 	 */
-	public void generateLorenze(Board board){
-		wealth = null;
-		wealth = new int[Constant.NUM_PEOPLE];
-		int i = 0;
-		for (Person p : board.getPeople()) {
-			wealth[i] = p.getGrain();
-			i += 1;
-		}
-		Arrays.sort(wealth);
+	public Pair[] generateLorenz(int[] wealth) {
+					
+		Pair[] lorenz = new Pair[Constant.NUM_PEOPLE];
 		
-		StringBuilder sb = new StringBuilder();
-		lorenz = null;
-		lorenz = new Point[Constant.NUM_PEOPLE];
 		for (int u = 0; u < Constant.NUM_PEOPLE; u++) {
 			double ud = (double) u;
 			double x = ((ud+1) / Constant.NUM_PEOPLE)*100;
 			double y;
 			y = (totalWealth(wealth, u) / totalWealth(wealth, Constant.NUM_PEOPLE-1))*100;
-			sb.append(df.format(x)+"% ; "+df.format(y)+"%");
+			lorenz[u] = new Pair(x,y);
+		}
+		return lorenz;
+		
+	}
+	
+	public void outputLorenz(Pair[] lorenz) {
+		StringBuilder sb = new StringBuilder();
+		for (int u = 0; u < lorenz.length; u++) {
+			sb.append(df.format(lorenz[u].getX())+"% ; "+df.format(lorenz[u].getY())+"%");
 			if (u == Constant.NUM_PEOPLE - 1){
 				sb.append("\n");
 			}
 			else {
 				sb.append(",");
 			}
+		}		
+		pw.write(sb.toString());
+	}
+	
+	public int[] generateWealthList(Board board){
+		
+		// initialize the array and get information from the board
+		int[] wealth = new int[Constant.NUM_PEOPLE];
+		int i = 0;
+		for (Person p : board.getPeople()) {
+			wealth[i] = p.getGrain();
+			i += 1;
 		}
+		
+		//sort the array in ascending order
+		Arrays.sort(wealth);
+		
+		return wealth;
+	}
+	
+	public void record(Board board, int time){
+		
+		// record time
+		StringBuilder sb = new StringBuilder();
+		sb.append(time+",");
 		pw.write(sb.toString());
 		
-	}
-	
-	public double totalWealth(int[] wealth, int n){
-
-		double sum = 0.0;
-		for(int i = 0; i <= n; i++){
-			sum += wealth[i];
-		}
-		return sum;
-	}
-	
-	public void writeLine(){
+		// generate wealth array
+		int[] wealth = new int[Constant.NUM_PEOPLE];
+		wealth = generateWealthList(board);
 		
+		// count number of people in different level
+		countPeople(wealth);		
+		
+		// calculate Lorenz curve
+		Pair[] lorenz = generateLorenz(wealth);
+		
+		// calculate gini index
+		
+		// output Lorenz curve
+		outputLorenz(lorenz);
 	}
 	
 	/**
