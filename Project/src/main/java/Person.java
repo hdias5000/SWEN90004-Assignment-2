@@ -17,7 +17,18 @@ public class Person {
         this.metabolism = metabolism;
         // random age between 0 and max age
         this.age = new Random().nextInt(maxAge);
+        this.maxAge = maxAge;
+        // random vision between 0 and max vision
         this.vision = 1 + new Random().nextInt(Constant.MAX_VISION);
+    }
+
+    static Person makeRandom(Random random, Board board) {
+        int metabolism = 1 + random.nextInt(Constant.METABOLISM_MAX);
+        int wealth = metabolism + random.nextInt(50);
+        int lifeExpectancy = Constant.LIFE_EXPECTANCY_MIN
+                + random.nextInt(Constant.LIFE_EXPECTANCY_MAX + 1);
+        Person person = new Person(board, wealth, metabolism, lifeExpectancy);
+        return person;
     }
 
     /**
@@ -64,9 +75,9 @@ public class Person {
     	compareGrain = patch.grain;	
     	
     	for (int i = x_prev; i != x_next+1; i++) {
-            i = i > 50 ? 0 : i;
+            i = i >= 50 ? 0 : i;
             for (int j = y_prev; j != y_next+1; j++) {
-            		j = j > 50 ? 0 : j;
+            		j = j >= 50 ? 0 : j;
             				
                 	patch = board.getPatchAt(i, j);
                 	
@@ -85,7 +96,7 @@ public class Person {
      */
     void moveEatAgeDie(Point to) {
         // move
-        board.put(this, to.getX(), to.getY());
+        board.move(this, to.getX(), to.getY());
 
         // eat
         grain -= metabolism;
@@ -93,9 +104,10 @@ public class Person {
         // age
         age += 1;
 
-        // die
+        // die (and produce offspring)
         if (age > maxAge || grain <= 0) {
             board.remove(this);
+            board.put(makeRandom(new Random(), board), to.getX(), to.getY());
         }
     }
 

@@ -69,11 +69,7 @@ public class Simulation {
         // put people to random positions
         Random random = new Random();
         for (int i = 0; i < Constant.NUM_PEOPLE; i++) {
-            int metabolism = 1 + random.nextInt(Constant.METABOLISM_MAX);
-            int wealth = metabolism + random.nextInt(50);
-            int lifeExpectancy = Constant.LIFE_EXPECTANCY_MIN
-                    + random.nextInt(Constant.LIFE_EXPECTANCY_MAX + 1);
-            Person person = new Person(board, wealth, metabolism, lifeExpectancy);
+            Person person = Person.makeRandom(random, board);
             int x = random.nextInt(Constant.BOARD_WIDTH);
             int y = random.nextInt(Constant.BOARD_HEIGHT);
             board.put(person, x, y);
@@ -90,6 +86,8 @@ public class Simulation {
         Simulation simulation = new Simulation();
         simulation.setup();
         System.out.println(simulation.board.patchesToString());
+
+        simulation.run(1000);
 
         simulation.csv.closeFile();
         // ...
