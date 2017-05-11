@@ -9,6 +9,7 @@ public class Person {
     int metabolism;
     int age;
     int maxAge;
+    int vision;
 
     public Person(Board board, int grain, int metabolism, int maxAge) {
         this.board = board;
@@ -16,6 +17,7 @@ public class Person {
         this.metabolism = metabolism;
         // random age between 0 and max age
         this.age = new Random().nextInt(maxAge);
+        this.vision = 1 + new Random().nextInt(Constant.MAX_VISION);
     }
 
     /**
