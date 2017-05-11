@@ -1,4 +1,5 @@
 import java.io.FileNotFoundException;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -19,7 +20,9 @@ public class Simulation {
         for (int i = 0; i < length; i++) {
             // TODO record data at this tick
 
-            for (Person person : board.getPeople()) {
+            Set<Person> people = new HashSet<>();
+            people.addAll(board.getPeople());
+            for (Person person : people) {
                 Point p = person.getNextPos();
                 harvest();
                 person.moveEatAgeDie(p);
@@ -87,7 +90,7 @@ public class Simulation {
         Simulation simulation = new Simulation();
         simulation.setup();
         System.out.println(simulation.board.patchesToString());
-        
+
         simulation.csv.closeFile();
         // ...
     }
