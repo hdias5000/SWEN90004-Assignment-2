@@ -48,7 +48,8 @@ public class Person {
      * Find the next point to move to
      * @return next point to move to
      */
-    Point getNextPos(Point at) {
+    Point getNextPos() {
+        Point at = board.getPosition(this);
         // TODO ask Board about patches and decide where to go
     	Patch patch;
     	int compareGrain;	
