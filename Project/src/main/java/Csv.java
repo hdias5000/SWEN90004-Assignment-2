@@ -15,11 +15,16 @@ public class Csv {
 	// Name of the output file
 	public static final String FILE_NAME = "output.csv";
 	
+	// File writer
 	private PrintWriter pw;
 	
+	// 2 decimal places formatting
 	DecimalFormat df = new DecimalFormat("####0.00");
 	
-	
+	/**
+	 *  Open or create a csv file and have titles ready
+	 * @throws FileNotFoundException
+	 */
 	public Csv() throws FileNotFoundException {
 		pw = new PrintWriter(new File(FILE_NAME));
 		StringBuilder sb = new StringBuilder();
@@ -31,15 +36,24 @@ public class Csv {
 		sb.append("Lorenz Curve,");
 		sb.append("\n");
 		pw.write(sb.toString());
-		// for testing usage
-		//pw.close();
 	}
 	
+	/**
+	 * Count people in different wealth level
+	 * @param wealth A list of wealth of all people
+	 */
 	public void countPeople(int[] wealth) {
+		
+		// the wealth of the richest person
 		double max_wealth = (double) wealth[wealth.length-1];
+		
 		int num_low = 0;
 		int num_mid = 0;
 		int num_high = 0;
+		
+		// low:  wealth <= max_wealth/3,
+		// mid:  max_wealth/3 < wealth <= 2*max_wealth/3
+		// high: wealth > 2*max_wealth/3
 		for(int i = 0; i < wealth.length; i++) {
 			if (wealth[i] <= max_wealth/3) {
 				num_low += 1;
@@ -51,11 +65,18 @@ public class Csv {
 				num_high += 1;
 			}
 		}
+		
 		StringBuilder sb = new StringBuilder();
 		sb.append(num_low+","+num_mid+","+num_high+",");
 		pw.write(sb.toString());
 	}
 	
+	/**
+	 * Total number of wealth of people not richer than nth poorest people
+	 * @param wealth A list of wealth of each person
+	 * @param n nth poorest people
+	 * @return total wealth not richer than nth people
+	 */
 	public double totalWealth(int[] wealth, int n){
 
 		double sum = 0.0;
@@ -65,45 +86,59 @@ public class Csv {
 		return sum;
 	}
 	
-	public void calculateGini(){
+	/**
+	 * Calculate Gini Coefficient
+	 * Formula refers to: https://en.wikipedia.org/wiki/Gini_coefficient#Calculation
+	 * @param wealth A list of wealth of each person
+	 */
+	public void calculateGini(int[] wealth){
 		
+		StringBuilder sb = new StringBuilder();
+		
+		double gini;
+		double sum_wealth = totalWealth(wealth, wealth.length-1);
+		double sum_rank_wealth = 0.0;
+		for (int i = 0; i < wealth.length; i++) {
+			sum_rank_wealth += wealth[i] * (i+1);
+		}
+		gini = (2*sum_rank_wealth)/(wealth.length*sum_wealth)
+				-((wealth.length+1)/wealth.length);
+		
+		sb.append(gini+",");
+		pw.write(sb.toString());
 	}
 	
 	/**
-	 * Total number of people, total number of wealth
-	 * sort people from low wealth to high
-	 * x = wealth of yth poorest people/ total wealth holding by people poorer than that people
-	 * y = yth poorest people/ total number of people
+	 * Generate the Lorenz Curve, represent as a list of coordinates
+	 * Number of points equals to total number of people
+	 * @param wealth
 	 */
-	public Pair[] generateLorenz(int[] wealth) {
-					
-		Pair[] lorenz = new Pair[Constant.NUM_PEOPLE];
+	public void generateLorenz(int[] wealth) {
+		
+		StringBuilder sb = new StringBuilder();
 		
 		for (int u = 0; u < Constant.NUM_PEOPLE; u++) {
 			double ud = (double) u;
 			double x = ((ud+1) / Constant.NUM_PEOPLE)*100;
 			double y;
 			y = (totalWealth(wealth, u) / totalWealth(wealth, Constant.NUM_PEOPLE-1))*100;
-			lorenz[u] = new Pair(x,y);
-		}
-		return lorenz;
-		
-	}
-	
-	public void outputLorenz(Pair[] lorenz) {
-		StringBuilder sb = new StringBuilder();
-		for (int u = 0; u < lorenz.length; u++) {
-			sb.append(df.format(lorenz[u].getX())+"% ; "+df.format(lorenz[u].getY())+"%");
+			sb.append(df.format(x)+"% ; "+df.format(y)+"%");
 			if (u == Constant.NUM_PEOPLE - 1){
 				sb.append("\n");
 			}
 			else {
 				sb.append(",");
 			}
-		}		
+		}
+		
 		pw.write(sb.toString());
 	}
 	
+	/**
+	 * Generate the list of wealth of each person from the current board
+	 * @param board The board which holds all people
+	 * @return A list of wealth of each person
+	 */
 	public int[] generateWealthList(Board board){
 		
 		// initialize the array and get information from the board
@@ -120,6 +155,11 @@ public class Csv {
 		return wealth;
 	}
 	
+	/**
+	 * Record information at a given time tick
+	 * @param board The current board
+	 * @param time Current time tick
+	 */
 	public void record(Board board, int time){
 		
 		// record time
@@ -134,13 +174,11 @@ public class Csv {
 		// count number of people in different level
 		countPeople(wealth);		
 		
-		// calculate Lorenz curve
-		Pair[] lorenz = generateLorenz(wealth);
-		
 		// calculate gini index
+		calculateGini(wealth);
 		
 		// output Lorenz curve
-		outputLorenz(lorenz);
+		generateLorenz(wealth);
 	}
 	
 	/**

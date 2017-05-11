@@ -32,6 +32,8 @@ public class Simulation {
             }
 
             time += 1;
+            
+            csv.record(board, time);
         }
     }
 
@@ -74,7 +76,6 @@ public class Simulation {
             board.put(person, x, y);
         }
         csv.record(board, time);
-        csv.closeFile();
     }
 
     /**
@@ -86,6 +87,8 @@ public class Simulation {
         Simulation simulation = new Simulation();
         simulation.setup();
         System.out.println(simulation.board.patchesToString());
+        
+        simulation.csv.closeFile();
         // ...
     }
 }
