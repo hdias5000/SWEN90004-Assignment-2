@@ -75,22 +75,22 @@ def plot_and_save_all(csv_filepath, line_filepath, hist_filepath, lorenz_filepat
     f.close()
 
 
-class ExperimentThread(Thread):
-    def __init__(self, java_args):
-        Thread.__init__(self)
-        self.__java_args = java_args
-        self.__csv_filename = java_args[9]
+# class ExperimentThread(Thread):
+#     def __init__(self, java_args):
+#         Thread.__init__(self)
+#         self.__java_args = java_args
+#         self.__csv_filename = java_args[9]
     
-    def run(self):
-        # run Java program, make csv
-        print(subprocess.run(['java', '-cp', 'program.jar', 'Simulation'] + self.__java_args))
-        # make plots from csv
-        plot_and_save_all(
-            self.__csv_filename,
-            self.__csv_filename.split(".")[0] + "_line.png",
-            self.__csv_filename.split(".")[0] + "_hist.png",
-            self.__csv_filename.split(".")[0] + "_lorenz.png"
-        )
+#     def run(self):
+#         # run Java program, make csv
+#         print(subprocess.run(['java', '-cp', 'program.jar', 'Simulation'] + self.__java_args))
+#         # make plots from csv
+#         plot_and_save_all(
+#             self.__csv_filename,
+#             self.__csv_filename.split(".")[0] + "_line.png",
+#             self.__csv_filename.split(".")[0] + "_hist.png",
+#             self.__csv_filename.split(".")[0] + "_lorenz.png"
+#         )
 
 def call_java_and_plot(java_args):
     try:
@@ -100,9 +100,9 @@ def call_java_and_plot(java_args):
         # make plots from csv
         plot_and_save_all(
             csv_filename,
-            csv_filename.split(".")[0] + "_line.png",
-            csv_filename.split(".")[0] + "_hist.png",
-            csv_filename.split(".")[0] + "_lorenz.png"
+            csv_filename + ".line.png",
+            csv_filename + ".hist.png",
+            csv_filename + ".lorenz.png"
         )
     except Exception as e:
         print(e)
