@@ -88,7 +88,7 @@ public class Simulation {
     	Arguments arguments = new Arguments(args);
         Simulation simulation = new Simulation();       
         simulation.setup(arguments);
-        System.out.println(simulation.board.patchesToString());
+//        System.out.println(simulation.board.patchesToString());
 
         simulation.run(arguments.time_max);
 
