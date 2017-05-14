@@ -27,6 +27,32 @@ for max_life_exp, percent_best_land in product(max_life_expectancy_values, perce
         "output/max_exp_{}_percent_best_{:2f}.csv".format(max_life_exp, percent_best_land) # csv filename
     ] )
 
-from tqdm import tqdm
-for i in tqdm(ThreadPool(max_threads).imap_unordered(worker, commands)):
-    pass
+print("{} tasks in total, starting...".format(len(commands)))
+x = 0
+for i in ThreadPool(max_threads).imap_unordered(worker, commands):
+    print("finsihed task {}".format(x))
+    x += 1
+
+print("creating table of gini indices...")
+
+import csv
+def get_final_gini(input_filename):
+    f = open(input_filename)
+    lines = csv.reader(f)
+    next(lines)
+    for row in lines:
+        gini = float(row[4])
+    f.close()
+    return gini
+
+def make_gini_table(input_filenames, output_file):
+    f = open(output_file, 'w')
+    writer = csv.writer(f)
+    for file in input_filenames:
+        writer.writerow([file, get_final_gini(file)])
+    f.close()
+
+import os
+filenames = ['output/' + f for f in os.listdir('output/')
+    if f.endswith('.csv') and not f.endswith('gini_table.csv')]
+make_gini_table(filenames, "output/gini_table.csv")
