@@ -29,6 +29,15 @@ def plt_num_categories_over_time(ticks, nums_low, nums_mid, nums_high):
     plt.title("number of people in 3 wealth levels over time")
     return fig
 
+def plt_gini_over_time(ticks, gini_indices):
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111)
+    # ax1.clf()
+    plt.plot(ticks, gini_indices)
+    plt.legend()
+    plt.title("gini index over time")
+    return fig
+
 def plt_lorenz_curve(tick, curve_str_list):
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
@@ -44,7 +53,7 @@ def plt_lorenz_curve(tick, curve_str_list):
     plt.legend()
     return fig
 
-def plot_and_save_all(csv_filepath, line_filepath, hist_filepath, lorenz_filepath):
+def plot_and_save_all(csv_filepath, line_filepath, hist_filepath, lorenz_filepath, gini_filepath):
     f = open(csv_filepath)
     lines = csv.reader(f)
 
@@ -72,6 +81,8 @@ def plot_and_save_all(csv_filepath, line_filepath, hist_filepath, lorenz_filepat
     line.savefig(line_filepath)
     lorenz = plt_lorenz_curve(ticks[-1], lorenz_curve)
     lorenz.savefig(lorenz_filepath)
+    gini = plt_gini_over_time(ticks, gini_indices)
+    gini.savefig(gini_filepath)
     f.close()
 
 
@@ -102,7 +113,8 @@ def call_java_and_plot(java_args):
             csv_filename,
             csv_filename + ".line.png",
             csv_filename + ".hist.png",
-            csv_filename + ".lorenz.png"
+            csv_filename + ".lorenz.png",
+            csv_filename + ".gini.png"
         )
     except Exception as e:
         print(e)
