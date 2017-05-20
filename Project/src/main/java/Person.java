@@ -24,9 +24,10 @@ public class Person {
         this.vision = 1 + new Random().nextInt(args.max_vision);
     }
 
-    static Person makeRandom(Arguments args, Random random, Board board) {
+    static Person makeRandom(Arguments args, Random random, Board board, int property) {
         int metabolism = 1 + random.nextInt(args.metabolism_max);
-        int wealth = metabolism + random.nextInt(50);
+        //int wealth = metabolism + random.nextInt(50);
+        int wealth = metabolism + property;
         int lifeExpectancy = args.life_expentancy_min
                 + random.nextInt(args.life_expentancy_max + 1);
         Person person = new Person(args, board, wealth, metabolism, lifeExpectancy);
@@ -109,7 +110,7 @@ public class Person {
         // die (and produce offspring)
         if (age > maxAge || grain <= 0) {
             board.remove(this);
-            board.put(makeRandom(args, new Random(), board), to.getX(), to.getY());
+            board.put(makeRandom(args, new Random(), board, grain), to.getX(), to.getY());
         }
     }
 

@@ -71,7 +71,7 @@ public class Simulation {
         // put people to random positions
         Random random = new Random();
         for (int i = 0; i < args.num_people; i++) {
-            Person person = Person.makeRandom(args, random, board);
+            Person person = Person.makeRandom(args, random, board, 0);
             int x = random.nextInt(Constant.BOARD_WIDTH);
             int y = random.nextInt(Constant.BOARD_HEIGHT);
             board.put(person, x, y);
