@@ -2,7 +2,7 @@ max_threads = 10
 
 import numpy as np
 # max_life_expectancy_values = [80]
-max_life_expectancy_values = [20, 40, 80, 120]
+max_life_expectancy_values = [5]
 percent_best_land_values = [0.1]
 growth_interval_values = [1]
 growth_amount_values = [4]
