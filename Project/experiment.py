@@ -47,7 +47,7 @@ def get_final_gini(input_filename):
     lines = csv.reader(f)
     next(lines)
     for row in lines:
-        gini = float(row[4])
+        gini = float(row[9])
     f.close()
     return gini
 

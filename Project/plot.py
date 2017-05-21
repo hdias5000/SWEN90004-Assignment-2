@@ -29,6 +29,27 @@ def plt_num_categories_over_time(ticks, nums_low, nums_mid, nums_high):
     plt.title("number of people in 3 wealth levels over time")
     return fig
 
+def plt_avg_wealth_each_class_over_time(ticks, avg_low, avg_mid, avg_high):
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111)
+    # ax1.clf()
+    plt.plot(ticks, avg_low, label="low")
+    plt.plot(ticks, avg_mid, label="mid")
+    plt.plot(ticks, avg_high, label="high")
+    plt.legend()
+    plt.title("averge wealth of each class over time")
+    return fig
+
+def plt_min_max_wealth_over_time(ticks, min_wealth, max_wealth):
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111)
+    #ax1.clf()
+    plt.plot(ticks, min_wealth, label = "min")
+    plt.plot(ticks, max_wealth, label = "max")
+    plt.legend()
+    plt.title("min and max wealth over time")
+    return fig
+
 def plt_gini_over_time(ticks, gini_indices):
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
@@ -53,7 +74,7 @@ def plt_lorenz_curve(tick, curve_str_list):
     plt.legend()
     return fig
 
-def plot_and_save_all(csv_filepath, line_filepath, hist_filepath, lorenz_filepath, gini_filepath):
+def plot_and_save_all(csv_filepath, line_filepath, hist_filepath, avg_filepath, min_max_filepath, lorenz_filepath, gini_filepath):
     f = open(csv_filepath)
     lines = csv.reader(f)
 
@@ -64,6 +85,11 @@ def plot_and_save_all(csv_filepath, line_filepath, hist_filepath, lorenz_filepat
     nums_low = []
     nums_mid = []
     nums_high = []
+    avg_low = []
+    avg_mid = []
+    avg_high = []
+    min_wealth = []
+    max_wealth = []
     gini_indices = []
     lorenz_curve = []
 
@@ -72,13 +98,22 @@ def plot_and_save_all(csv_filepath, line_filepath, hist_filepath, lorenz_filepat
         nums_low.append(int(row[1]))
         nums_mid.append(int(row[2]))
         nums_high.append(int(row[3]))
-        gini_indices.append(float(row[4]))
-        lorenz_curve = row[5:]
+        avg_low.append(float(row[4]))
+        avg_mid.append(float(row[5]))
+        avg_high.append(float(row[6]))
+        min_wealth.append(int(row[7]))
+        max_wealth.append(int(row[8]))
+        gini_indices.append(float(row[9]))
+        lorenz_curve = row[10:]
 
     hist = plt_histogram(nums_low[-1], nums_mid[-1], nums_high[-1])
     hist.savefig(hist_filepath)
     line = plt_num_categories_over_time(ticks, nums_low, nums_mid, nums_high)
     line.savefig(line_filepath)
+    avg = plt_avg_wealth_each_class_over_time(ticks, avg_low, avg_mid, avg_high)
+    avg.savefig(avg_filepath)
+    min_max = plt_min_max_wealth_over_time(ticks, min_wealth, max_wealth)
+    min_max.savefig(min_max_filepath)
     lorenz = plt_lorenz_curve(ticks[-1], lorenz_curve)
     lorenz.savefig(lorenz_filepath)
     gini = plt_gini_over_time(ticks, gini_indices)
@@ -113,6 +148,8 @@ def call_java_and_plot(java_args):
             csv_filename,
             csv_filename + ".line.png",
             csv_filename + ".hist.png",
+            csv_filename + ".avg.png",
+            csv_filename + ".min_max.png",
             csv_filename + ".lorenz.png",
             csv_filename + ".gini.png"
         )
