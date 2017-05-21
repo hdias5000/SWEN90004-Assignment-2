@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.Set;
 
 /**
+ * Main class for the simulation, runs from command line
  * Created by Jack on 3/5/2017.
  */
 public class Simulation {
@@ -29,9 +30,9 @@ public class Simulation {
                 person.moveEatAgeDie(p);
             }
 
-            if (time % Constant.GRAIN_GROWTH_INTERVAL == 0) {
+            if (time % args.grainGrowthInterval == 0) {
                 for (Patch patch : board.getPatches()) {
-                    patch.addGrain(Constant.GRAIN_GROWTH_AMOUNT);
+                    patch.addGrain(args.grainGrowthRate);
                 }
             }
 
@@ -50,14 +51,12 @@ public class Simulation {
             Set<Person> people = entry.getValue();
             Patch patch = board.getPatchAt(p.getX(), p.getY());
             // NOTE integer division below
-            int divided = patch.removeGrain() / people.size();
+            int divided = patch.removeAll() / people.size();
             for (Person person : people) {
                 person.addGrain(divided);
             }
         }
     }
-
-    // TODO have a function to export data to CSV
 
     /**
      * Set up the simulation
@@ -70,7 +69,7 @@ public class Simulation {
 
         // put people to random positions
         Random random = new Random();
-        for (int i = 0; i < args.num_people; i++) {
+        for (int i = 0; i < args.numPeople; i++) {
             Person person = Person.makeRandom(args, random, board);
             int x = random.nextInt(Constant.BOARD_WIDTH);
             int y = random.nextInt(Constant.BOARD_HEIGHT);
@@ -85,14 +84,17 @@ public class Simulation {
      * @throws FileNotFoundException 
      */
     public static void main(String[] args) throws FileNotFoundException {
+        // parse arguments
     	Arguments arguments = new Arguments(args);
+
+    	// setup simulation
         Simulation simulation = new Simulation();       
         simulation.setup(arguments);
-//        System.out.println(simulation.board.patchesToString());
 
-        simulation.run(arguments.time_max);
+        // run simulation
+        simulation.run(arguments.timeMax);
 
+        // save csv output
         simulation.csv.closeFile();
-        // ...
     }
 }

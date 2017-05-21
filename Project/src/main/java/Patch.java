@@ -1,14 +1,15 @@
 /**
+ * Patch in the simulation
  * Created by Jack on 3/5/2017.
  */
 public class Patch {
-    int grain;
-    int maxGrain;
+    private int grain;
+    private int maxGrain;
 
     /**
-     *
-     * @param grain
-     * @param maxGrain
+     * Construct a new patch
+     * @param grain initial amount of grain on the patch
+     * @param maxGrain maximum amount of grain on the patch
      */
     public Patch(int grain, int maxGrain) {
         this.grain = grain;
@@ -16,22 +17,26 @@ public class Patch {
     }
 
     /**
-     *
-     * @return
+     * Get the amount of grain on the patch
+     * @return the amount of grain on the patch
      */
     public int getGrain() {
         return grain;
     }
 
-    public int removeGrain() {
+    /**
+     * Remove all grain on the patch
+     * @return the amount of grain removed from patch
+     */
+    public int removeAll() {
         int amount = grain;
         this.grain = 0;
         return amount;
     }
 
     /**
-     *
-     * @param amount
+     * Add an amount of grain to the patch
+     * @param amount amount of grain to be added
      */
     public void addGrain(int amount) {
         if (Constant.MAX_GRAIN > maxGrain) {

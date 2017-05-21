@@ -3,20 +3,20 @@
  * Created by Jack on 3/5/2017.
  */
 public class Point {
-    int x;
-    int y;
+    private int x;
+    private int y;
 
     /**
-     *
-     * @return
+     * Get x value of the point
+     * @return x value of the point
      */
     public int getX() {
         return x;
     }
 
     /**
-     *
-     * @return
+     * Get y value of the point
+     * @return y value of the point
      */
     public int getY() {
         return y;
@@ -25,8 +25,8 @@ public class Point {
     /**
      * Construct a new point
      *
-     * @param x x coordinate
-     * @param y y coordinate
+     * @param x x value
+     * @param y y value
      */
     public Point(int x, int y) {
         this.x = x;

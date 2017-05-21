@@ -1,6 +1,5 @@
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by Jack on 3/5/2017.
@@ -67,7 +66,7 @@ public class Board {
         // ;; these patches are the "best land"
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                if (random.nextFloat() < args.percent_best_land) {
+                if (random.nextFloat() < args.percentBestLand) {
                     maxGrainVals[i][j] = Constant.MAX_GRAIN;
                     initialGrainVals[i][j] = maxGrainVals[i][j];
                 } else {
