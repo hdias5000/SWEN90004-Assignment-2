@@ -9,10 +9,10 @@ import java.util.Set;
  * Created by Jack on 3/5/2017.
  */
 public class Simulation {
-	Arguments args;
-    Board board;
-    Csv csv;
-    int time = 0;
+	private Arguments args;
+    private Board board;
+    private Csv csv;
+    private int time = 0;
 
     /**
      * Run the simulation
@@ -20,8 +20,6 @@ public class Simulation {
      */
     void run(int length) {
         for (int i = 0; i < length; i++) {
-            // TODO record data at this tick
-
             Set<Person> people = new HashSet<>();
             people.addAll(board.getPeople());
             for (Person person : people) {
@@ -37,7 +35,8 @@ public class Simulation {
             }
 
             time += 1;
-            
+
+            // record data at this tick
             csv.record(board, time);
         }
     }

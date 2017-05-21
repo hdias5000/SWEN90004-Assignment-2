@@ -2,7 +2,6 @@
  * Class storing command line arguments
  */
 public class Arguments {
-
 	// the length of time for the simulation
 	public int timeMax;
 	
@@ -11,7 +10,8 @@ public class Arguments {
 	
 	// the maximum value of people can see the farthest
 	public int maxVision;
-	
+
+	// the maximum metabolism a person can have
 	public int metabolismMax;
 	
 	// the minimum value of life expectancy

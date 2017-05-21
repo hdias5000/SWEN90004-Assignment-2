@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
  * Created by Jack on 3/5/2017.
  */
 public class Board {
-	Arguments args;
-    int width;
-    int height;
+	private Arguments args;
+    private int width;
+    private int height;
 
     private Map<Person, Point> positions;
     private Patch[][] patches;
@@ -54,7 +54,7 @@ public class Board {
     	this.args = args;
         this.width = width;
         this.height = height;
-        this.positions = new HashMap<Person, Point>();
+        this.positions = new HashMap<>();
         patches = new Patch[height][width];
 
         Random random = new Random();
@@ -62,8 +62,8 @@ public class Board {
         double[][] maxGrainVals = new double[height][width];
         double[][] initialGrainVals = new double[height][width];
 
-        //  ;; give some patches the highest amount of grain possible --
-        // ;; these patches are the "best land"
+        // give some patches the highest amount of grain possible --
+        // these patches are the "best land"
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (random.nextFloat() < args.percentBestLand) {
@@ -76,8 +76,8 @@ public class Board {
             }
         }
 
-        //   ;; spread that grain around the window a little and put a little back
-        // ;; into the patches that are the "best land" found above
+        // spread that grain around the window a little and put a little back
+        // into the patches that are the "best land" found above
         for (int n = 0; n < 5; n++) {
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
@@ -85,12 +85,11 @@ public class Board {
                         initialGrainVals[i][j] = maxGrainVals[i][j];
                         diffuse(initialGrainVals, height, width, i, j, 0.25);
                     }
-//                    System.out.println(i + " " + j + " " + initialGrainVals[i][j]);
                 }
             }
         }
 
-        // ;; spread the grain around some more
+        // spread the grain around some more
         for (int n = 0; n < 10; n++) {
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
@@ -100,7 +99,6 @@ public class Board {
         }
 
         // initialise patches
-        // TODO set random grain
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 int grainHere = (int) initialGrainVals[i][j];
@@ -186,22 +184,6 @@ public class Board {
         positions.remove(p);
     }
 
-//    /**
-//     * Get people at a position
-//     *
-//     * @param x x coordinate of board
-//     * @param y y coordinate of board
-//     * @return all people at the position
-//     */
-//    public Set<Person> getPeopleAt(int x, int y) {
-//        Set<Person> people = new HashSet<Person>();
-//        for (Map.Entry<Person, Point> entry : positions.entrySet()) {
-//            if (entry.getValue().getX() == x && entry.getValue().getY() == y) {
-//                people.add(entry.getKey());
-//            }
-//        }
-//        return people;
-//    }
 
     /**
      * Peek a patch on board
@@ -215,8 +197,8 @@ public class Board {
     }
 
     /**
-     *
-     * @return
+     * Get a string representation of patches
+     * @return string representation of patches
      */
     public String patchesToString() {
         StringBuilder sb = new StringBuilder();
