@@ -54,7 +54,7 @@ def plt_gini_over_time(ticks, gini_indices):
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
     # ax1.clf()
-    plt.plot(ticks, gini_indices)
+    plt.plot(ticks, gini_indices, label="gini index")
     plt.legend()
     plt.title("gini index over time")
     return fig

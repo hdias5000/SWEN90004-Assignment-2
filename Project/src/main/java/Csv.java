@@ -3,33 +3,32 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
- * This class is for output formatting
+ * Output formatting and csv file generation
  * @author Chao Li
  * @date 9/5/2017
  */
 public class Csv {
 	
 	// All settings
-	public Arguments args;
+	private Arguments args;
 	
 	// File writer
 	private PrintWriter pw;
 	
 	// 2 decimal places formatting
-	DecimalFormat df = new DecimalFormat("0.00");
+	private DecimalFormat df = new DecimalFormat("0.00");
 	
 	/**
-	 *  Open or create a csv file and have titles ready
-	 * @throws FileNotFoundException
+	 * Open or create a csv file and have titles ready
+	 * @throws FileNotFoundException Error creating the csv file
 	 */
 	public Csv(Arguments args) throws FileNotFoundException {
 		
 		this.args = args;
 		
-		pw = new PrintWriter(new File(args.file_name));
+		pw = new PrintWriter(new File(args.filename));
 		StringBuilder sb = new StringBuilder();
 		sb.append("Time tick,");
 		sb.append("Number of people with low wealth,");
@@ -141,13 +140,13 @@ public class Csv {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		for (int u = 0; u < args.num_people; u++) {
+		for (int u = 0; u < args.numPeople; u++) {
 			double ud = (double) u;
-			double x = ((ud+1) / args.num_people)*100;
+			double x = ((ud+1) / args.numPeople)*100;
 			double y;
-			y = (totalWealth(wealth, u) / totalWealth(wealth, args.num_people-1))*100;
+			y = (totalWealth(wealth, u) / totalWealth(wealth, args.numPeople -1))*100;
 			sb.append(df.format(x)+"% ; "+df.format(y)+"%");
-			if (u == args.num_people - 1){
+			if (u == args.numPeople - 1){
 				sb.append("\n");
 			}
 			else {
@@ -166,7 +165,7 @@ public class Csv {
 	public int[] generateWealthList(Board board){
 		
 		// initialize the array and get information from the board
-		int[] wealth = new int[args.num_people];
+		int[] wealth = new int[args.numPeople];
 		int i = 0;
 		for (Person p : board.getPeople()) {
 			wealth[i] = p.getGrain();
@@ -188,11 +187,11 @@ public class Csv {
 		
 		// record time
 		StringBuilder sb = new StringBuilder();
-		sb.append(time+",");
+		sb.append(time).append(",");
 		pw.write(sb.toString());
 		
 		// generate wealth array
-		int[] wealth = new int[args.num_people];
+		int[] wealth;
 		wealth = generateWealthList(board);
 		
 		// count number of people in different level
