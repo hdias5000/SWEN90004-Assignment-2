@@ -19,7 +19,7 @@ public class Csv {
 	private PrintWriter pw;
 	
 	// 2 decimal places formatting
-	DecimalFormat df = new DecimalFormat("####0.00");
+	DecimalFormat df = new DecimalFormat("0.00");
 	
 	/**
 	 *  Open or create a csv file and have titles ready
@@ -35,6 +35,11 @@ public class Csv {
 		sb.append("Number of people with low wealth,");
 		sb.append("Number of people with mid wealth,");
 		sb.append("Number of people with high wealth,");
+		sb.append("Avg wealth of low class,");
+		sb.append("Avg wealth of mid class,");
+		sb.append("Avg wealth of high class,");
+		sb.append("Min wealth,");
+		sb.append("Max wealth,");
 		sb.append("Gini Index,");
 		sb.append("Lorenz Curve,");
 		sb.append("\n");
@@ -54,23 +59,39 @@ public class Csv {
 		int num_mid = 0;
 		int num_high = 0;
 		
+		double avg_low = 0.0;
+		double avg_mid = 0.0;
+		double avg_high = 0.0;
+		
+		int min = wealth[0];
+		int max = wealth[wealth.length-1];
+		
 		// low:  wealth <= max_wealth/3,
 		// mid:  max_wealth/3 < wealth <= 2*max_wealth/3
 		// high: wealth > 2*max_wealth/3
 		for(int i = 0; i < wealth.length; i++) {
 			if (wealth[i] <= max_wealth/3) {
 				num_low += 1;
+				avg_low += wealth[i];
 			}
 			else if (wealth[i] > max_wealth/3 && wealth[i] <= max_wealth*2/3) {
 				num_mid += 1;
+				avg_mid += wealth[i];
 			}
 			else {
 				num_high += 1;
+				avg_high += wealth[i];
 			}
 		}
 		
+		avg_low = avg_low / num_low;
+		avg_mid = avg_mid / num_mid;
+		avg_high = avg_high / num_high;
+		
 		StringBuilder sb = new StringBuilder();
 		sb.append(num_low+","+num_mid+","+num_high+",");
+		sb.append(df.format(avg_low)+","+df.format(avg_mid)+","+df.format(avg_high)+",");
+		sb.append(min+","+max+",");
 		pw.write(sb.toString());
 	}
 	
