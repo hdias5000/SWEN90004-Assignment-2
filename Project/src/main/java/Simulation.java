@@ -18,8 +18,9 @@ public class Simulation {
      * Run the simulation
      * @param length time length of simulation
      */
-    void run(int length) {
+    private void run(int length) {
         for (int i = 0; i < length; i++) {
+            // activities of people
             Set<Person> people = new HashSet<>();
             people.addAll(board.getPeople());
             for (Person person : people) {
@@ -28,9 +29,14 @@ public class Simulation {
                 person.moveEatAgeDie(p);
             }
 
+            // activities of patches
             if (time % args.grainGrowthInterval == 0) {
                 for (Patch patch : board.getPatches()) {
-                    patch.addGrain(args.grainGrowthRate);
+                    if (Constant.PROPORTIONAL_GROWTH_ENABLED) {
+                        patch.addGrain( (int)(patch.getMaxGrain() * Constant.PATCH_GROWTH_PROPORTION) );
+                    } else {
+                        patch.addGrain(args.grainGrowthRate);
+                    }
                 }
             }
 
@@ -44,7 +50,7 @@ public class Simulation {
     /**
      * Perform harvest activity, take grain from patches equally distribute to people at the patch
      */
-    void harvest() {
+    private void harvest() {
         for (Map.Entry<Point, Set<Person>> entry: board.getAllPositions().entrySet()) {
             Point p = entry.getKey();
             Set<Person> people = entry.getValue();
@@ -59,9 +65,9 @@ public class Simulation {
 
     /**
      * Set up the simulation
-     * @throws FileNotFoundException 
+     * @throws FileNotFoundException CSV file cannot be created
      */
-    void setup(Arguments arguments) throws FileNotFoundException {
+    private void setup(Arguments arguments) throws FileNotFoundException {
     	args = arguments;
         board = new Board(args, Constant.BOARD_WIDTH, Constant.BOARD_HEIGHT);
         csv = new Csv(args);
@@ -80,7 +86,7 @@ public class Simulation {
     /**
      * The main function
      * @param args command line arguments
-     * @throws FileNotFoundException 
+     * @throws FileNotFoundException CSV file cannot be created
      */
     public static void main(String[] args) throws FileNotFoundException {
         // parse arguments

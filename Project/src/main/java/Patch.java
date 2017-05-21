@@ -25,6 +25,14 @@ public class Patch {
     }
 
     /**
+     * Get the maximum amount of grain on the patch
+     * @return the maximum amount of grain on the patch
+     */
+    public int getMaxGrain() {
+        return maxGrain;
+    }
+
+    /**
      * Remove all grain on the patch
      * @return the amount of grain removed from patch
      */
