@@ -47,8 +47,11 @@ public class Patch {
      * @param amount amount of grain to be added
      */
     public void addGrain(int amount) {
-        if (Constant.MAX_GRAIN > maxGrain) {
+        if (maxGrain > grain) {
             grain += amount;
+            if (grain > maxGrain) {
+            	grain = maxGrain;
+            }
         }
     }
 
