@@ -22,13 +22,12 @@ public class Person {
      * @param metabolism metabolism of the person
      * @param maxAge     number of ticks the person can live in maximum
      */
-    public Person(Arguments args, Board board, int grain, int metabolism, int maxAge) {
+    public Person(Arguments args, Board board, int grain, int metabolism, int maxAge, int age) {
         this.args = args;
         this.board = board;
         this.grain = grain;
         this.metabolism = metabolism;
-        // random age between 0 and max age
-        this.age = new Random().nextInt(maxAge);
+        this.age = age;
         this.maxAge = maxAge;
         // random vision between 0 and max vision
         this.vision = 1 + new Random().nextInt(args.maxVision);
@@ -47,8 +46,9 @@ public class Person {
         int wealth = metabolism + random.nextInt(50);
         int lifeExpectancy = args.lifeExpectancyMin
                 + random.nextInt(args.lifeExpectancyMax + 1);
-        Person person = new Person(args, board, wealth, metabolism, lifeExpectancy);
-        return person;
+        // random age between 0 and expectancy
+        int age = random.nextInt(lifeExpectancy);
+        return new Person(args, board, wealth, metabolism, lifeExpectancy, age);
     }
 
     /**
@@ -120,7 +120,9 @@ public class Person {
         // die (and produce offspring)
         if (age > maxAge || grain <= 0) {
             board.remove(this);
-            board.put(makeRandom(args, new Random(), board), to.getX(), to.getY());
+            Person offspring = makeRandom(args, new Random(), board);
+            offspring.age = 0;
+            board.put(offspring, to.getX(), to.getY());
         }
     }
 }
