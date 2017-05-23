@@ -76,8 +76,16 @@ public class Simulation {
         Random random = new Random();
         for (int i = 0; i < args.numPeople; i++) {
             Person person = Person.makeRandom(args, random, board);
-            int x = random.nextInt(Constant.BOARD_WIDTH);
-            int y = random.nextInt(Constant.BOARD_HEIGHT);
+            int x;
+            int y;
+            if (Constant.RANDOM_OSITION_ENABLED) {
+            	x = random.nextInt(Constant.BOARD_WIDTH);
+                y = random.nextInt(Constant.BOARD_HEIGHT);
+            }
+            else {
+            	x = Constant.BOARD_WIDTH / 2;
+            	y = Constant.BOARD_HEIGHT / 2;
+            }
             board.put(person, x, y);
         }
         csv.record(board, time);

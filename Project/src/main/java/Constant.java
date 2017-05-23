@@ -23,4 +23,7 @@ public class Constant {
 
 	// the proportion of max grain as growth rate
 	public static final double PATCH_GROWTH_PROPORTION = 0.2;
+	
+	// whether to generate all people in the same position
+	public static final boolean RANDOM_OSITION_ENABLED = true;
 }
