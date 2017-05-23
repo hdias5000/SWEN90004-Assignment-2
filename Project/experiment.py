@@ -17,21 +17,27 @@ import subprocess
 from itertools import product
 commands = []
 for vision, max_life_exp, percent_best_land, interval, amount in product(
-    vision_values, max_life_expectancy_values, percent_best_land_values, growth_interval_values, growth_amount_values):
-    commands.append( [
-        "250", # num people
-        str(vision), # max vision
-        "15", # metabolism_max
-        "1", # life expectancy min
-        str(max_life_exp), # life expectancy max
-        str(percent_best_land), # percent best land
-        "1.0", # grain growth interval
-        "4", # grain growth rate
-        "1000", # time max
-        "output/vision{}_maxexp{}_percentbest{:.2f}_growthinterval{}_growthamount{}.csv".format(
-            vision, max_life_exp, percent_best_land, interval, amount
-        ) # csv filename
-    ] )
+    vision_values,
+    max_life_expectancy_values,
+    percent_best_land_values,
+    growth_interval_values,
+    growth_amount_values):
+
+    for i in range(3):
+        commands.append( [
+            "250", # num people
+            str(vision), # max vision
+            "15", # metabolism_max
+            "1", # life expectancy min
+            str(max_life_exp), # life expectancy max
+            str(percent_best_land), # percent best land
+            "1.0", # grain growth interval
+            "4", # grain growth rate
+            "1000", # time max
+            "output/vision{}_maxexp{}_percentbest{:.2f}_growthinterval{}_growthamount{}_run_{}.csv".format(
+                vision, max_life_exp, percent_best_land, interval, amount, i + 1
+            ) # csv filename
+        ] )
 
 print("{} tasks in total, starting...".format(len(commands)))
 x = 0
@@ -51,11 +57,18 @@ def get_final_gini(input_filename):
     f.close()
     return gini
 
+from collections import defaultdict
 def make_gini_table(input_filenames, output_file):
     f = open(output_file, 'w')
     writer = csv.writer(f)
+    writer.writerow(['setting', 'all gini', 'avg gini'])
+    gini_indices = defaultdict(list)
     for file in input_filenames:
-        writer.writerow([file, get_final_gini(file)])
+        setting = file.split("run")[0].rstrip("_")
+        gini_indices[setting].append(get_final_gini(file))
+    for key, indices in gini_indices.items():
+        strs = [str(i) for i in indices]
+        writer.writerow([key, ";".join(strs), sum(indices) / float(len(indices))])
     f.close()
 
 import os
