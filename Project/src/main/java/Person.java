@@ -51,6 +51,19 @@ public class Person {
         return new Person(args, board, wealth, metabolism, lifeExpectancy, age);
     }
 
+    String getWealthLevel(int maxWealth) {
+        // low:  wealth <= max_wealth/3,
+        // mid:  max_wealth/3 < wealth <= 2*max_wealth/3
+        // high: wealth > 2*max_wealth/3
+        if (grain <= maxWealth / 3) {
+            return "low";
+        } else if (grain> maxWealth / 3 && grain <= maxWealth * 2 / 3) {
+            return "mid";
+        } else {
+            return "high";
+        }
+    }
+
     /**
      * Get the amount of grain the person currently holds
      *
@@ -112,7 +125,12 @@ public class Person {
         board.move(this, to.getX(), to.getY());
 
         // eat
-        grain -= metabolism;
+        if (Constant.PROPORTIONAL_METABOLISM_ENABLED) {
+            int consumed = (int) Math.min(Constant.METABOLISM_MIN, (int)grain * Constant.METABOLISM_PROPORTION);
+            grain -= consumed;
+        } else {
+            grain -= metabolism;
+        }
 
         // age
         age += 1;

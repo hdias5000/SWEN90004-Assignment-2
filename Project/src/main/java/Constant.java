@@ -25,5 +25,14 @@ public class Constant {
 	public static final double PATCH_GROWTH_PROPORTION = 0.2;
 	
 	// whether to generate all people in the same position
-	public static final boolean RANDOM_OSITION_ENABLED = true;
+	public static final boolean RANDOM_POSITION_ENABLED = false;
+
+	// whether to apply tax on rich people
+	public static final boolean TAXATION_ENABLED = true;
+	public static final double TAX_PERCENTAGE = 0.5;
+
+	public static final boolean PROPORTIONAL_METABOLISM_ENABLED = false;
+	public static final double METABOLISM_PROPORTION = 0.3;
+	public static final int METABOLISM_MIN = 1;
+
 }
