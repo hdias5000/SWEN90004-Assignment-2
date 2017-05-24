@@ -113,7 +113,7 @@ public class Simulation {
             Person person = Person.makeRandom(args, random, board);
             int x;
             int y;
-            if (Constant.RANDOM_POSITION_ENABLED) {
+            if (!Constant.SAME_POSITION_ENABLED) {
             	x = random.nextInt(Constant.BOARD_WIDTH);
                 y = random.nextInt(Constant.BOARD_HEIGHT);
             }
