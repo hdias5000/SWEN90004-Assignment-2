@@ -137,8 +137,15 @@ public class Person {
 
         // die (and produce offspring)
         if (age > maxAge || grain <= 0) {
-            board.remove(this);
             Person offspring = makeRandom(args, new Random(), board);
+            if (Constant.WEALTH_INHERITANCE_ENABLED) {
+                // if died from aging, offspring get a percentage of wealth
+                if (grain > 0) {
+                    offspring.grain = (int) (this.grain * Constant.WEALTH_INHERITANCE);
+                }
+            }
+            board.remove(this);
+
             offspring.age = 0;
             board.put(offspring, to.getX(), to.getY());
         }
