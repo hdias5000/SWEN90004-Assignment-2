@@ -46,6 +46,7 @@ def plt_min_max_wealth_over_time(ticks, min_wealth, max_wealth):
     #ax1.clf()
     plt.plot(ticks, min_wealth, label = "min")
     plt.plot(ticks, max_wealth, label = "max")
+    plt.plot(ticks, np.array(max_wealth) - np.array(min_wealth), label="diff")
     plt.legend()
     plt.title("min and max wealth over time")
     return fig
