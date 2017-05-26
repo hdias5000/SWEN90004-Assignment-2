@@ -6,13 +6,14 @@ import java.util.*;
  * Created by Jack on 3/5/2017.
  */
 public class Simulation {
-	private Arguments args;
+    private Arguments args;
     private Board board;
     private Csv csv;
     private int time = 0;
 
     /**
      * Run the simulation
+     *
      * @param length time length of simulation
      */
     private void run(int length) {
@@ -30,7 +31,8 @@ public class Simulation {
             if (time % args.grainGrowthInterval == 0) {
                 for (Patch patch : board.getPatches()) {
                     if (Constant.PROPORTIONAL_GROWTH_ENABLED) {
-                        patch.addGrain( (int)(patch.getMaxGrain() * Constant.PATCH_GROWTH_PROPORTION) );
+                        patch.addGrain((int) (patch.getMaxGrain() *
+                                Constant.PATCH_GROWTH_PROPORTION));
                     } else {
                         patch.addGrain(args.grainGrowthRate);
                     }
@@ -45,25 +47,25 @@ public class Simulation {
     }
 
     /**
-     * Perform harvest activity, take grain from patches equally distribute to people at the patch
+     * Perform harvest activity, take grain from patches equally distribute
+     * to people at the patch
      */
     private void harvest() {
         double tax = 0;
 
-        // initialize the array and get information from the board
+        // get max wealth first
         int[] wealth = new int[args.numPeople];
         int i = 0;
         for (Person p : board.getPeople()) {
             wealth[i] = p.getGrain();
             i += 1;
         }
-
-        //sort the array in ascending order
         Arrays.sort(wealth);
-
         int maxWealth = wealth[args.numPeople - 1];
 
-        for (Map.Entry<Point, Set<Person>> entry: board.getAllPositions().entrySet()) {
+        // harvest at each patch with people
+        for (Map.Entry<Point, Set<Person>> entry :
+                board.getAllPositions().entrySet()) {
             Point p = entry.getKey();
             Set<Person> people = entry.getValue();
             Patch patch = board.getPatchAt(p.getX(), p.getY());
@@ -74,16 +76,17 @@ public class Simulation {
                     // if rich, take a percentage of harvest
                     if (person.getWealthLevel(maxWealth).equals("high")) {
                         double taken = divided * Constant.TAX_PERCENTAGE;
-                        person.addGrain((int)(divided - taken));
+                        person.addGrain((int) (divided - taken));
                         tax += taken;
                     }
                 }
-                person.addGrain((int)divided);
+                // divide the grain equally to everyone
+                person.addGrain((int) divided);
             }
         }
 
-        // if poor, give equally divided tax
         if (Constant.TAXATION_ENABLED) {
+            // if poor, give equally divided tax
             List<Person> poorPeople = new ArrayList<>();
             for (Person p : board.getPeople()) {
                 if (p.getWealthLevel(maxWealth).equals("low")) {
@@ -91,8 +94,8 @@ public class Simulation {
                 }
             }
             double divided = tax / poorPeople.size();
-            for (Person p: poorPeople) {
-                p.addGrain((int)divided);
+            for (Person p : poorPeople) {
+                p.addGrain((int) divided);
             }
         }
 
@@ -100,10 +103,11 @@ public class Simulation {
 
     /**
      * Set up the simulation
+     *
      * @throws FileNotFoundException CSV file cannot be created
      */
     private void setup(Arguments arguments) throws FileNotFoundException {
-    	args = arguments;
+        args = arguments;
         board = new Board(args, Constant.BOARD_WIDTH, Constant.BOARD_HEIGHT);
         csv = new Csv(args);
 
@@ -111,15 +115,13 @@ public class Simulation {
         Random random = new Random();
         for (int i = 0; i < args.numPeople; i++) {
             Person person = Person.makeRandom(args, random, board);
-            int x;
-            int y;
+            int x, y;
             if (!Constant.SAME_POSITION_ENABLED) {
-            	x = random.nextInt(Constant.BOARD_WIDTH);
+                x = random.nextInt(Constant.BOARD_WIDTH);
                 y = random.nextInt(Constant.BOARD_HEIGHT);
-            }
-            else {
-            	x = Constant.BOARD_WIDTH / 2;
-            	y = Constant.BOARD_HEIGHT / 2;
+            } else {
+                x = Constant.BOARD_WIDTH / 2;
+                y = Constant.BOARD_HEIGHT / 2;
             }
             board.put(person, x, y);
         }
@@ -128,15 +130,16 @@ public class Simulation {
 
     /**
      * The main function
+     *
      * @param args command line arguments
      * @throws FileNotFoundException CSV file cannot be created
      */
     public static void main(String[] args) throws FileNotFoundException {
         // parse arguments
-    	Arguments arguments = new Arguments(args);
+        Arguments arguments = new Arguments(args);
 
-    	// setup simulation
-        Simulation simulation = new Simulation();       
+        // setup simulation
+        Simulation simulation = new Simulation();
         simulation.setup(arguments);
 
         // run simulation

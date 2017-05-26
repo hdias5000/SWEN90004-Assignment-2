@@ -8,6 +8,7 @@ public class Point {
 
     /**
      * Get x value of the point
+     *
      * @return x value of the point
      */
     public int getX() {
@@ -16,6 +17,7 @@ public class Point {
 
     /**
      * Get y value of the point
+     *
      * @return y value of the point
      */
     public int getY() {

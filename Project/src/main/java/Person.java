@@ -22,7 +22,8 @@ public class Person {
      * @param metabolism metabolism of the person
      * @param maxAge     number of ticks the person can live in maximum
      */
-    public Person(Arguments args, Board board, int grain, int metabolism, int maxAge, int age) {
+    public Person(Arguments args, Board board, int grain, int metabolism,
+                  int maxAge, int age) {
         this.args = args;
         this.board = board;
         this.grain = grain;
@@ -51,13 +52,19 @@ public class Person {
         return new Person(args, board, wealth, metabolism, lifeExpectancy, age);
     }
 
+    /**
+     * Get wealth level of a person
+     *
+     * @param maxWealth maximum wealth in simulation
+     * @return "low", "mid" or "high" for wealth level
+     */
     String getWealthLevel(int maxWealth) {
         // low:  wealth <= max_wealth/3,
         // mid:  max_wealth/3 < wealth <= 2*max_wealth/3
         // high: wealth > 2*max_wealth/3
         if (grain <= maxWealth / 3) {
             return "low";
-        } else if (grain> maxWealth / 3 && grain <= maxWealth * 2 / 3) {
+        } else if (grain > maxWealth / 3 && grain <= maxWealth * 2 / 3) {
             return "mid";
         } else {
             return "high";
@@ -94,10 +101,14 @@ public class Person {
 
         patch = board.getPatchAt(at.getX(), at.getY());
 
-        int x_prev = at.getX() - vision < 0 ? (at.getX() - vision + 1) + 50 : at.getX() - vision;
-        int x_next = at.getX() + vision >= 50 ? (at.getX() + vision) - 50 : at.getX() + vision;
-        int y_prev = at.getY() - vision < 0 ? (at.getY() - vision + 1) + 50 : at.getY() - vision;
-        int y_next = at.getY() + vision >= 50 ? (at.getY() + vision) - 50 : at.getY() + vision;
+        int x_prev = at.getX() - vision < 0 ?
+                (at.getX() - vision + 1) + 50 : at.getX() - vision;
+        int x_next = at.getX() + vision >= 50 ?
+                (at.getX() + vision) - 50 : at.getX() + vision;
+        int y_prev = at.getY() - vision < 0 ?
+                (at.getY() - vision + 1) + 50 : at.getY() - vision;
+        int y_next = at.getY() + vision >= 50 ?
+                (at.getY() + vision) - 50 : at.getY() + vision;
 
         compareGrain = patch.getGrain();
 
@@ -105,9 +116,7 @@ public class Person {
             i = i >= 50 ? 0 : i;
             for (int j = y_prev; j != y_next + 1; j++) {
                 j = j >= 50 ? 0 : j;
-
                 patch = board.getPatchAt(i, j);
-
                 if (compareGrain < patch.getGrain()) {
                     compareGrain = patch.getGrain();
                     at = new Point(i, j);
@@ -126,7 +135,8 @@ public class Person {
 
         // eat
         if (Constant.PROPORTIONAL_METABOLISM_ENABLED) {
-            int consumed = (int) Math.min(Constant.METABOLISM_MIN, (int)grain * Constant.METABOLISM_PROPORTION);
+            int consumed = (int) Math.min(Constant.METABOLISM_MIN,
+                    (int) grain * Constant.METABOLISM_PROPORTION);
             grain -= consumed;
         } else {
             grain -= metabolism;
@@ -141,7 +151,8 @@ public class Person {
             if (Constant.WEALTH_INHERITANCE_ENABLED) {
                 // if died from aging, offspring get a percentage of wealth
                 if (grain > 0) {
-                    offspring.grain = (int) (this.grain * Constant.WEALTH_INHERITANCE);
+                    offspring.grain = (int) (this.grain *
+                            Constant.WEALTH_INHERITANCE);
                 }
             }
             board.remove(this);

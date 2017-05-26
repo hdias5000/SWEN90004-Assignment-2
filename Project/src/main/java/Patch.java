@@ -8,7 +8,8 @@ public class Patch {
 
     /**
      * Construct a new patch
-     * @param grain initial amount of grain on the patch
+     *
+     * @param grain    initial amount of grain on the patch
      * @param maxGrain maximum amount of grain on the patch
      */
     public Patch(int grain, int maxGrain) {
@@ -18,6 +19,7 @@ public class Patch {
 
     /**
      * Get the amount of grain on the patch
+     *
      * @return the amount of grain on the patch
      */
     public int getGrain() {
@@ -26,6 +28,7 @@ public class Patch {
 
     /**
      * Get the maximum amount of grain on the patch
+     *
      * @return the maximum amount of grain on the patch
      */
     public int getMaxGrain() {
@@ -34,6 +37,7 @@ public class Patch {
 
     /**
      * Remove all grain on the patch
+     *
      * @return the amount of grain removed from patch
      */
     public int removeAll() {
@@ -44,13 +48,14 @@ public class Patch {
 
     /**
      * Add an amount of grain to the patch
+     *
      * @param amount amount of grain to be added
      */
     public void addGrain(int amount) {
         if (maxGrain > grain) {
             grain += amount;
             if (grain > maxGrain) {
-            	grain = maxGrain;
+                grain = maxGrain;
             }
         }
     }

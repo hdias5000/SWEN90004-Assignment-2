@@ -2,10 +2,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * The board(stage) of simulation, similar to "World' in Netlogo
  * Created by Jack on 3/5/2017.
  */
 public class Board {
-	private Arguments args;
     private int width;
     private int height;
 
@@ -22,7 +22,8 @@ public class Board {
      * @param y          y coordinate of point of diffuse
      * @param percentage percentage of point to be removed and shared for diffuse
      */
-    private static void diffuse(double[][] values, int height, int width, int x, int y, double percentage) {
+    private static void diffuse(double[][] values, int height, int width,
+                                int x, int y, double percentage) {
         double divided = values[x][y] * percentage / 8.0;
         values[x][y] -= values[x][y] * percentage;
 
@@ -51,7 +52,6 @@ public class Board {
      * @param height height of board
      */
     public Board(Arguments args, int width, int height) {
-    	this.args = args;
         this.width = width;
         this.height = height;
         this.positions = new HashMap<>();
@@ -123,7 +123,6 @@ public class Board {
      * @return set of patches on the board
      */
     public Set<Patch> getPatches() {
-        // TODO more efficient implementation
         Set<Patch> s = new HashSet<>();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -156,19 +155,26 @@ public class Board {
         positions.put(p, new Point(x, y));
     }
 
+    /**
+     * Get the position of a person
+     *
+     * @param p person to be located
+     * @return position of person
+     */
     public Point getPosition(Person p) {
         return positions.get(p);
     }
 
     /**
      * Get positions for all people on board
-     * @return
+     *
+     * @return positions of all people
      */
     public Map<Point, Set<Person>> getAllPositions() {
-        Map<Point, Set<Person>> posMap = new HashMap<Point, Set<Person>>();
+        Map<Point, Set<Person>> posMap = new HashMap<>();
         for (Map.Entry<Person, Point> entry : positions.entrySet()) {
             if (!posMap.containsKey(entry.getValue())) {
-                posMap.put(entry.getValue(), new HashSet<Person>());
+                posMap.put(entry.getValue(), new HashSet<>());
             }
             posMap.get(entry.getValue()).add(entry.getKey());
         }
@@ -198,6 +204,7 @@ public class Board {
 
     /**
      * Get a string representation of patches
+     *
      * @return string representation of patches
      */
     public String patchesToString() {
